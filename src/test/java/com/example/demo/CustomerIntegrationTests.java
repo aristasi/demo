@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 // port number is generated randomly
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@Testcontainers
 class CustomerIntegrationTests {
 
 	@Autowired
@@ -27,8 +27,14 @@ class CustomerIntegrationTests {
 
 	// docker run -e MYSQL_USERNAME=... -e MYSQL_PASSWORD=....  mysql:latest
 
-	@Container
-	private static MySQLContainer container = new MySQLContainer("mysql:latest");
+
+	//this annotation will shut down the container at the end of the test thats why we remove test containers annotations
+	private static MySQLContainer container = (MySQLContainer) new MySQLContainer("mysql:latest");
+
+	@BeforeAll
+	public static void setup() {
+		container.start();
+	}
 
 	@DynamicPropertySource
 	public static void overrideProps(DynamicPropertyRegistry registry) {
