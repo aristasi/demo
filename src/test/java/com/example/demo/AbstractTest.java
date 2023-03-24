@@ -7,7 +7,9 @@ import org.testcontainers.containers.MySQLContainer;
 
 public class AbstractTest {
 
-    public static MySQLContainer container = new MySQLContainer("mysql:latest");
+    // in order to reduce container init must be added in home directory in file .testcontainers.properties : testcontainers.reuse.enable=true
+    public static MySQLContainer container = (MySQLContainer) new MySQLContainer("mysql:latest")
+            .withReuse(true);
 
     @BeforeAll
     public static void setup() {
