@@ -22,15 +22,16 @@ class CustomerIntegrationTests {
 	@Autowired
 	private CustomerDao customerDao;
 
+	// docker run -e MYSQL_USERNAME=... -e MYSQL_PASSWORD=....  mysql:latest
+
 	@Container
-	private static MySQLContainer container = new MySQLContainer("mysql:latest")
-			.withDatabaseName("somedatabase")
-			.withUsername("root")
-			.withPassword("root");
+	private static MySQLContainer container = new MySQLContainer("mysql:latest");
 
 	@DynamicPropertySource
 	public static void overrideProps(DynamicPropertyRegistry registry) {
 		registry.add("spring.datasource.url", container::getJdbcUrl);
+		registry.add("spring.datasource.username", container::getUsername);
+		registry.add("spring.datasource.password", container::getPassword);
 	}
 
 	@Test
