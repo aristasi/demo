@@ -19,4 +19,11 @@ public class CustomerDao {
                 (rs, rowNum) -> new Customer(rs.getLong("id"), rs.getString("first_name"), rs.getString("last_name"))
         );
     }
+
+        public void save(Customer customer) {
+            jdbcTemplate.update(
+                    "INSERT INTO customers (first_name, last_name) VALUES (?, ?)",
+                    customer.getFirstName(), customer.getLastName()
+            );
+        }
 }
